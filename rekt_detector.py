@@ -2,7 +2,7 @@ import sopel.module
 import random
 
 @sopel.module.event('KICK')
-@sopel.module.rule('Chanserv.*kicked.*')
+@sopel.module.rule('.*')
 
 def rekt(bot, trigger):
     rektlist = ['rektangle', 'tyranosaurus rekt', 'the good, the rekt, and the ugly', 'south by southrekt', 'brektfast']
