@@ -1,8 +1,7 @@
 import sopel.module
 import random
 
-def FEN_to_bot_string(fen):
-    final_str = ''
+def FEN_to_bot_string(fen, bot):
     figures = {
         'p': u'\u265F',
         'r': u'\u265C',
@@ -34,8 +33,7 @@ def FEN_to_bot_string(fen):
                 rank_string = rank_string + figures[c]
                 square_count = square_count + 1
 
-        final_str = final_str + rank_string + '\n'
-    return final_str
+        bot.say(rank_string)
 
 @sopel.module.commands('chesspuzzle')
 def puzzle(bot, trigger):
@@ -46,4 +44,4 @@ def puzzle(bot, trigger):
     ]
 
     selection = random.choice(fen_list)
-    bot.say(FEN_to_bot_string(selection))
+    FEN_to_bot_string(selection, bot)
