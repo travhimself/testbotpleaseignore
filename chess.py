@@ -47,3 +47,7 @@ def puzzle(bot):
 
     selection = random.choice(fen_list)
     bot.say(FEN_to_bot_string(selection))
+
+@sopel.module.commands('chessmoduletest')
+def test(bot):
+    bot.say('module loaded')
