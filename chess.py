@@ -17,7 +17,7 @@ def FEN_to_bot_string(fen):
         'Q': u'\u2655',
         'K': u'\u2654',
     }
-    colors = (u'\u2591', u'\u2588')
+    colors = (' ', u'\u2591')
     fen_sections = fen.split(' ') 
     ranks = fen_sections[0].split('/')
     for i in xrange(0,8):
