@@ -1,6 +1,7 @@
 import sopel.module
 import random
 
+@sopel.module.event('KICK')
 @sopel.module.rule('Chanserv.*kicked.*')
 
 def rekt(bot, trigger):
