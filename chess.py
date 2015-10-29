@@ -37,7 +37,7 @@ def FEN_to_bot_string(fen):
         final_str = final_str + rank_string + '\n'
     return final_str
 
-@sm.command('chesspuzzle')
+@sm.commands('chesspuzzle')
 def puzzle(bot):
     fen_list = [
         '1r3rk1/1pnnq1bR/p1pp2B1/P2P1p2/1PP1pP2/2B3P1/5PK1/2Q4R w - - 0 1',
