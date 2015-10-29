@@ -27,10 +27,11 @@ def FEN_to_bot_string(fen, bot):
                 c = int(c)
                 for j in xrange(square_count, square_count + c):
                     color = ((j % 2) + (i % 2)) % 2
-                    rank_string = rank_string + colors[color]
+                    rank_string = rank_string + colors[color] + colors[color]
                 square_count = square_count + c
             except ValueError: 
-                rank_string = rank_string + figures[c]
+                color = ((i % 2) + (square_count % 2)) % 2
+                rank_string = rank_string + figures[c] + colors[color]
                 square_count = square_count + 1
 
         bot.say(rank_string)
