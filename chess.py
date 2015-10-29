@@ -38,7 +38,7 @@ def FEN_to_bot_string(fen):
     return final_str
 
 @sopel.module.commands('chesspuzzle')
-def puzzle(bot):
+def puzzle(bot, trigger):
     fen_list = [
         '1r3rk1/1pnnq1bR/p1pp2B1/P2P1p2/1PP1pP2/2B3P1/5PK1/2Q4R w - - 0 1',
         '1r3k2/2n1p1b1/3p2QR/p1pq1pN1/bp6/7P/2P2PP1/4RBK1 w - - 0 1',
@@ -47,7 +47,3 @@ def puzzle(bot):
 
     selection = random.choice(fen_list)
     bot.say(FEN_to_bot_string(selection))
-
-@sopel.module.commands('chessmoduletest')
-def test(bot):
-    bot.say('module loaded')
