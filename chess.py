@@ -48,7 +48,7 @@ def problem_to_bot_string(problem, bot):
         bot.say(rank_string)
 
     bot.say(to_moves[fen_sections[1]])
-    bot.memory['current_chess_puzzle'] = solution.split(' ')[1]
+    bot.memory['current_chess_puzzle'] = solution
 
 def load_problems(f):
     problems = []
@@ -68,8 +68,12 @@ def load_problems(f):
 def puzzle(bot, trigger):
     if trigger.group(2):
         if bot.memory.contains('current_chess_puzzle'):
+            solution = bot.memory['current_chess_puzzle'].split(' ')[1]
+            if trigger.group == 'solution':
+                bot.say(solution)
+                return
             answer = trigger.nick
-            if trigger.group(2) in bot.memory['current_chess_puzzle']:
+            if trigger.group(2) in solution:
                 answer = answer + ' is the best!'
             else:
                 answer = answer + ' is the worst.'
