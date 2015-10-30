@@ -66,5 +66,6 @@ def record_welp(bot, trigger):
 @sopel.module.commands('welpstats')
 def welp_stats(bot, trigger):
     nick = trigger.group(2) or trigger.nick
+    nick = nick.strip()
     wins = bot.db.get_nick_value(nick, 'welpcall_wins') or 0
     bot.say(nick + ' has ' + str(wins) + ' welpcall wins')
