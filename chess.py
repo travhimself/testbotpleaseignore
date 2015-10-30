@@ -48,6 +48,7 @@ def problem_to_bot_string(problem, bot):
         bot.say(rank_string)
 
     bot.say(to_moves[fen_sections[1]])
+    bot.memory['current_chess_problem'] = solution.split(' ')[1]
 
 def load_problems(f):
     problems = []
@@ -63,9 +64,19 @@ def load_problems(f):
     f.close() 
     return problems
 
-
 @sopel.module.commands('chesspuzzle')
 def puzzle(bot, trigger):
-    problem_list = load_problems(open('resources/fens.txt', 'r'))
-    selection = random.choice(problem_list)
-    problem_to_bot_string(selection, bot)
+    if trigger.group(2):
+        if bot.memory.contains('current_chess_puzzle'):
+            answer = trigger.nick
+            if trigger.group(2) == bot.memory['current_chess_puzzle']:
+                answer = answer + ' is the best!'
+            else:
+                answer = answer + ' is the worst.'
+            bot.say(answer)
+        else:
+            bot.say('No current puzzle.')
+    else:
+        problem_list = load_problems(open('resources/fens.txt', 'r'))
+        selection = random.choice(problem_list)
+        problem_to_bot_string(selection, bot)
