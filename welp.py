@@ -3,7 +3,7 @@ import sopel.tools.time
 import datetime
 
 
-@sopel.module.rule('.*welp.*')
+@sopel.module.rule('welp')
 def record_welp(bot, trigger):
     nick = trigger.nick
     welp_count = bot.db.get_nick_value(nick, 'welp_count') or 0
