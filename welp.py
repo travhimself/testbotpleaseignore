@@ -3,7 +3,7 @@ import sopel.tools.time
 import datetime
 import random
 
-@sopel.modules.interval(5)
+@sopel.module.interval(5)
 def welp_interval(bot):
     if bot.memory.contains('next_welpcall'):
         now = datetime.datetime.now()
