@@ -24,7 +24,7 @@ def _set_next_welpcall(bot):
     bot.memory['next_welpcall'] = future
 
 def _run_welpcall(bot):
-    if bot.memory['welpcall_active']:
+    if bot.memory.contains('welpcall_active') and bot.memory['welpcall_active']:
         _end_welpcall(bot)
     bot.msg('#testchannelpleaseignore', 'welpcall, you nerds') 
     bot.memory['welpcall_active'] = True
