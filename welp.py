@@ -3,12 +3,12 @@ import sopel.tools.time
 import datetime
 import random
 
-@sopel.modules.interval(60)
+@sopel.modules.interval(5)
 def welp_interval(bot):
     if bot.memory.contains('next_welpcall'):
         now = datetime.datetime.now()
         delta = now - bot.memory[next_welpcall]
-        if abs(delta.total_seconds < 60):
+        if abs(delta.total_seconds < 5):
             if "#testchannelpleaseignore" in bot.channels:
                 # It's go time!
                 _set_next_welpcall(bot)
