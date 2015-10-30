@@ -3,12 +3,12 @@ import sopel.tools.time
 import datetime
 import random
 
-@sopel.module.interval(5)
+@sopel.module.interval(60)
 def welp_interval(bot):
     if bot.memory.contains('next_welpcall'):
         now = datetime.datetime.now()
         delta = now - bot.memory['next_welpcall']
-        if abs(delta.total_seconds()) < 6:
+        if abs(delta.total_seconds()) < 61:
             if "#testchannelpleaseignore" in bot.channels:
                 # It's go time!
                 _set_next_welpcall(bot)
@@ -19,7 +19,10 @@ def welp_interval(bot):
 
 def _set_next_welpcall(bot):
     # hard coded at 1 minute for debugging
-    delta = datetime.timedelta(minutes=1)
+    hours = random.choice(range(6,12))
+    minutes = random.choice(range(0, 60))
+    seconds = random.choice(range(0, 60))
+    delta = datetime.timedelta(hours=hours, minutes=minutes, seconds=seconds)
     future = datetime.datetime.now() + delta
     bot.memory['next_welpcall'] = future
 
@@ -40,6 +43,10 @@ def _end_welpcall(bot):
         bot.msg('#testchannelpleaseignore', 'welpcall complete.')
         bot.msg('#testchannelpleaseignore', 'Winner: ' + (winner or 'no one'))
         bot.msg('#testchannelpleaseignore', 'Losers: ' + 'everyone else') #TODO
+
+    if winner:
+        win_count = bot.db.get_nick_value(winner, 'welpcall_wins') or 0
+        bot.db.set_nick_value(winner, 'welpcall_wins', win_count + 1)
     
 @sopel.module.rule('welp')
 def record_welp(bot, trigger):
@@ -49,9 +56,15 @@ def record_welp(bot, trigger):
         if nick not in welp_list:
             welp_list.append(nick)
         
-        if len(welp_list) >= 3:
+        if len(welp_list) >= 4:
             _end_welpcall(bot)
     #welp_count = bot.db.get_nick_value(nick, 'welp_count') or 0
     #welp_count = welp_count + 1
     #bot.db.set_nick_value(nick, 'welp_count', welp_count)
     #bot.say('TIME DEBUG: ' + sopel.tools.time.format_time(time=datetime.datetime.now()))
+
+@sopel.module.commands('welpstats')
+def welp_stats(bot, trigger):
+    nick = trigger.group(2) or trigger.nick
+    wins = bot.db.get_nick_value(nick, 'welpcall_wins') or 0
+    bot.say(nick + ' has ' + str(wins) + ' welpcall wins')
