@@ -1,7 +1,7 @@
 import sopel.module
 import random
 
-def FEN_to_bot_string(fen, bot):
+def problem_to_bot_string(problem, bot):
     figures = {
         'p': u'\u265F',
         'r': u'\u265C',
@@ -16,7 +16,18 @@ def FEN_to_bot_string(fen, bot):
         'Q': u'\u2655',
         'K': u'\u2654',
     }
+    to_moves = {
+        'w': 'White to move',
+        'b': 'Black to move',
+    }
     colors = (' ', u'\u2591')
+    
+    credit = problem[0]
+    fen = problem[1]
+    solution = problem[2]
+
+    bot.say(credit)
+
     fen_sections = fen.split(' ') 
     ranks = fen_sections[0].split('/')
     for i in xrange(0,8):
@@ -36,13 +47,25 @@ def FEN_to_bot_string(fen, bot):
 
         bot.say(rank_string)
 
+    bot.say(to_moves[fen_sections[1]])
+
+def load_problems(f):
+    problems = []
+    counter = 0
+    current = []
+    for line in f:
+        if (counter % 5) < 3:
+            current.append(line.strip())
+        elif (counter % 5) == 3:
+            problems.append(current)
+            current = []
+        counter = counter + 1
+    f.close() 
+    return problems
+
+
 @sopel.module.commands('chesspuzzle')
 def puzzle(bot, trigger):
-    fen_list = [
-        '1r3rk1/1pnnq1bR/p1pp2B1/P2P1p2/1PP1pP2/2B3P1/5PK1/2Q4R w - - 0 1',
-        '1r3k2/2n1p1b1/3p2QR/p1pq1pN1/bp6/7P/2P2PP1/4RBK1 w - - 0 1',
-        'r2q1k1r/ppp1bB1p/2np4/6N1/3PP1bP/8/PPP5/RNB2RK1 w - - 0 1',
-    ]
-
-    selection = random.choice(fen_list)
-    FEN_to_bot_string(selection, bot)
+    problem_list = load_problems(open('resources/fens.txt', 'r'))
+    selection = random.choice(problem_list)
+    problem_to_bot_string(selection, bot)
