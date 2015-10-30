@@ -69,7 +69,7 @@ def puzzle(bot, trigger):
     if trigger.group(2):
         if bot.memory.contains('current_chess_puzzle'):
             answer = trigger.nick
-            if trigger.group(2) == bot.memory['current_chess_puzzle']:
+            if trigger.group(2) in bot.memory['current_chess_puzzle']:
                 answer = answer + ' is the best!'
             else:
                 answer = answer + ' is the worst.'
