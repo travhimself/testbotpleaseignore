@@ -48,7 +48,7 @@ def problem_to_bot_string(problem, bot):
         bot.say(rank_string)
 
     bot.say(to_moves[fen_sections[1]])
-    bot.memory['current_chess_problem'] = solution.split(' ')[1]
+    bot.memory['current_chess_puzzle'] = solution.split(' ')[1]
 
 def load_problems(f):
     problems = []
