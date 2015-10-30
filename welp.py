@@ -8,7 +8,7 @@ def welp_interval(bot):
     if bot.memory.contains('next_welpcall'):
         now = datetime.datetime.now()
         delta = now - bot.memory['next_welpcall']
-        if abs(delta.total_seconds < 5):
+        if abs(delta.total_seconds) < 6:
             if "#testchannelpleaseignore" in bot.channels:
                 # It's go time!
                 _set_next_welpcall(bot)
@@ -43,7 +43,7 @@ def _end_welpcall(bot):
     
 @sopel.module.rule('welp')
 def record_welp(bot, trigger):
-    if bot.memory.contains['welpcall_active'] and bot.memory['welpcall_active']:
+    if bot.memory.contains('welpcall_active') and bot.memory['welpcall_active']:
         welp_list = bot.memory['welpcall_list']
         nick = trigger.nick
         if nick not in welp_list:
