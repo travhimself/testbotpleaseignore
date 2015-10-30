@@ -69,7 +69,7 @@ def puzzle(bot, trigger):
     if trigger.group(2):
         if bot.memory.contains('current_chess_puzzle'):
             solution = bot.memory['current_chess_puzzle'].split(' ')[1]
-            if trigger.group == 'solution':
+            if trigger.group(2) == 'solution':
                 bot.say(solution)
                 return
             answer = trigger.nick
