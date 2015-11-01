@@ -2,6 +2,7 @@ import sopel.module
 import sopel.tools.time
 import datetime
 import random
+import utils
 
 @sopel.module.interval(60)
 def welp_interval(bot):
@@ -18,7 +19,6 @@ def welp_interval(bot):
         _set_next_welpcall(bot)
 
 def _set_next_welpcall(bot):
-    # hard coded at 1 minute for debugging
     hours = random.choice(range(6,12))
     minutes = random.choice(range(0, 60))
     seconds = random.choice(range(0, 60))
@@ -35,37 +35,45 @@ def _run_welpcall(bot):
     
 def _end_welpcall(bot):
     bot.memory['welpcall_active'] = False
+    users = utils.get_user_list(bot, '#testchannelpleaseignore')
+
     if len(bot.memory['welpcall_list']):
         winner = bot.memory['welpcall_list'][0]
+        missed = set(users) - set(bot.memory['welpcall_list'])
     else:
         winner = None
+        missed = users
+
     if '#testchannelpleaseignore' in bot.channels:
         bot.msg('#testchannelpleaseignore', 'welpcall complete.')
         bot.msg('#testchannelpleaseignore', 'Winner: ' + (winner or 'no one'))
-        bot.msg('#testchannelpleaseignore', 'Losers: ' + 'everyone else') #TODO
+        bot.msg('#testchannelpleaseignore', 'Failed to welp: ' + ', '.join(missed))
 
     if winner:
         win_count = bot.db.get_nick_value(winner, 'welpcall_wins') or 0
         bot.db.set_nick_value(winner, 'welpcall_wins', win_count + 1)
+    if missed:
+        for nick in missed:
+            loss_count = bot.db.get_nick_value(nick, 'welpcall_misses') or 0
+            bot.db.set_nick_value(nick, 'welpcall_misses', loss_count + 1)
+
     
 @sopel.module.rule('welp')
 def record_welp(bot, trigger):
+    # TODO: record winner at time of welp
     if bot.memory.contains('welpcall_active') and bot.memory['welpcall_active']:
         welp_list = bot.memory['welpcall_list']
         nick = trigger.nick
         if nick not in welp_list:
             welp_list.append(nick)
         
-        if len(welp_list) >= 4:
+        if welp_list == utils.get_user_list(bot, '#testchannelpleaseignore')
             _end_welpcall(bot)
-    #welp_count = bot.db.get_nick_value(nick, 'welp_count') or 0
-    #welp_count = welp_count + 1
-    #bot.db.set_nick_value(nick, 'welp_count', welp_count)
-    #bot.say('TIME DEBUG: ' + sopel.tools.time.format_time(time=datetime.datetime.now()))
 
 @sopel.module.commands('welpstats')
 def welp_stats(bot, trigger):
     nick = trigger.group(2) or trigger.nick
     nick = nick.strip()
     wins = bot.db.get_nick_value(nick, 'welpcall_wins') or 0
-    bot.say(nick + ' has ' + str(wins) + ' welpcall wins')
+    misses = bot.db.get_nick_value(nick, 'welpcall_misses') or 0
+    bot.say(nick + ' has ' + str(wins) + ' welpcall wins and ' + str(misses) + ' missed welpcalls.')
