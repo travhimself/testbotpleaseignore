@@ -67,7 +67,7 @@ def record_welp(bot, trigger):
         if nick not in welp_list:
             welp_list.append(nick)
         
-        if welp_list == utils.get_user_list(bot, '#testchannelpleaseignore')
+        if welp_list == utils.get_user_list(bot, '#testchannelpleaseignore'):
             _end_welpcall(bot)
 
 @sopel.module.commands('welpstats')
