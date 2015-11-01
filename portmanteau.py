@@ -3,7 +3,7 @@ import random
 
 
 @sopel.module.commands('portmanteau')
-def portmanteau(words):
+def portmanteau(bot, trigger):
     if not trigger.group(2):
         bot.say('Need some words, doggles.')
         return
